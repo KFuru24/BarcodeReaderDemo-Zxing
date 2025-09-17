@@ -22,12 +22,13 @@
         </script>
 
         <script src="https://unpkg.com/@zxing/library@latest"></script>
+        <!-- <script src="https://unpkg.com/@zxing/Browser@latest"></script> -->
         <script>
             const videoElement = document.getElementById('video');
             const resultElement = document.getElementById('qr-reader-results');
  
             // バーコードリーダーを初期化
-            const codeReader = new ZXing.BrowserMultiFormatReader();
+            const codeReader = new ZXing.BrowserBarcodeReader();
  
             console.log('ZXing code readerを起動中...');
 
@@ -36,7 +37,10 @@
                 if (result) {
                     // スキャン成功
                     console.log('スキャン成功:', result);
-                    resultElement.textContent = result.text;
+                    // バーコード形式の確認
+                    if (result.getBarcodeFormat() === BarcodeFormat.CODABAR) {
+                        resultElement = result.getText();
+                    }
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
