@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Zxing Demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="./manifest.json">
+    </head>
+
+    <body>
+        <h2 style="background-color: darkgreem; margin: 0;">Barcode Reader Demo</h2>
+        <video id="video" width="300" height="200" style="border: 1px solid black"></video>
+        <div style="background-color: whitesmoke;">
+            <pre id="qr-reader-results" style="font-size: 1rem;">
+                Scanned: 
+            </pre>
+        </div>
+
+        <script>
+            if('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js', { scope: '/BarcodeReaderDemo/' });
+            }
+        </script>
+
+        <script src="https://unpkg.com/@zxing/library@latest"></script>
+        <script>
+            const videoElement = document.getElementById('video');
+            const resultElement = document.getElementById('qr-reader-results');
+ 
+            // バーコードリーダーを初期化
+            const codeReader = new ZXing.BrowserMultiFormatReader();
+ 
+            console.log('ZXing code readerを起動中...');
+
+            // カメラへのアクセス許可を求め、ストリームを開始
+            codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
+                if (result) {
+                    // スキャン成功
+                    console.log('スキャン成功:', result);
+                    resultElement.textContent = result.getText();
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    // スキャンエラー
+                    console.error('スキャンエラー:', err);
+                }
+            });
+        </script>
+    </body>
+</html>
