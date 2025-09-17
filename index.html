@@ -17,7 +17,7 @@
 
         <script>
             if('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js', { scope: '/BarcodeReaderDemo-Zxing/' });
+                navigator.serviceWorker.register('./sw.js', { scope: '/BarcodeReaderDemo/' });
             }
         </script>
 
@@ -36,7 +36,7 @@
                 if (result) {
                     // スキャン成功
                     console.log('スキャン成功:', result);
-                    resultElement.textContent = result.getText();
+                    resultElement.textContent = result.text;
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
