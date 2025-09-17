@@ -3,8 +3,8 @@
     "name": "Barcode reader demo",
     "short_name": "Barcode Reader Demo",
     "description": "A Barcode reader application that can read any barcodes using camera by Zxing.",
-    "scope": "/BarcodeReaderDemo/",
-    "start_url": "/BarcodeReaderDemo/BarcodeReaderDemo.html",
+    "scope": "/BarcodeReaderDemo-Zxing/",
+    "start_url": "/BarcodeReaderDemo-Zxing/index.html",
     "background_color": "#2f3d58",
     "theme_color": "#2f3d58",
     "orientation": "any",
@@ -15,4 +15,5 @@
             "sizes": "300x300"
         }
     ]
+
 }
