@@ -8,7 +8,7 @@
 
     <body>
         <h2 style="background-color: darkgreem; margin: 0;">Barcode Reader Demo</h2>
-        <video id="video" width="300" height="200" style="border: 1px solid black"></video>
+        <video id="video" width="window.innerWidth * 0.8" height="window.innerHeight * 0.5" style="border: 1px solid black"></video>
         <div style="background-color: whitesmoke;">
             <pre id="qr-reader-results" style="font-size: 1rem;">
                 Scanned: 
@@ -40,7 +40,7 @@
                     // スキャン成功
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
-                    resultElement.textContent = result.getText();
+                    resultElement.textContent = result.getBarcodeFormat();
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
