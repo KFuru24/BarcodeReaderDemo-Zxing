@@ -37,11 +37,7 @@
                     // スキャン成功
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
-                    if (result.getBarcodeFormat() === BarcodeFormat.CODABAR) {
-                        resultElement.textContent = 'CODABAR';
-                    } else {
-                        resultElement.textContent = 'ELSE';
-                    }
+                    resultElement.textContent = result.getBarcodeFormat().ToString;
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
