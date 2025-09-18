@@ -5,18 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="manifest" href="./manifest.json">
         <style>
+            body {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
             .camera-container {
                 position: relative;
-                width: 90vh;
-                height: 50vh;
-                margin: auto;
+                flex: 1;
+                background: black;
             }
             video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 display: block;
-                border: 1px solid #ccc;
             }
             .scan-area {
                 position: absolute;
@@ -39,6 +43,12 @@
                 pointer-events: none;
                 clip-path: polygon(0% 0%, 0% 100%, 20% 100%, 20% 35%, 80% 35%, 80% 65%, 20% 65%, 20% 100%, 100% 100%, 100% 0%);
             }
+            .results-container {
+                flex: 1;
+                background-color: whitesmoke;
+                overflow: auto;
+                padding: 1rem;
+            }
         </style>
     </head>
 
@@ -49,7 +59,7 @@
             <div class="overlay"></div>
             <div class="scan-area" id="scan-area"></div>
         </div>
-        <div style="background-color: whitesmoke;">
+        <div class="results-container">
             <pre id="qr-reader-results" style="font-size: 1rem;">
                 Scanned: 
             </pre>
