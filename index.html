@@ -25,9 +25,12 @@
         <script>
             const videoElement = document.getElementById('video');
             const resultElement = document.getElementById('qr-reader-results');
+
+            const hints = new Map();
+            hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.CODABAR]);
          
             // バーコードリーダーを初期化
-            const codeReader = new ZXing.BrowserMultiFormatReader();
+            const codeReader = new ZXing.BrowserMultiFormatReader(hints);
  
             console.log('ZXing code readerを起動中...');
 
