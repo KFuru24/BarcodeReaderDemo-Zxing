@@ -4,11 +4,49 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="manifest" href="./manifest.json">
+        <style>
+            .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            }
+            video {
+            width: 100%;
+            display: block;
+            border: 1px solid #ccc;
+            }
+            .scan-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60%;
+            height: 30%;
+            transform: translate(-50%, -50%);
+            border: 2px solid red;
+            box-sizing: border-box;
+            pointer-events: none;
+            }
+            .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            pointer-events: none;
+            clip-path: polygon(0% 0%, 0% 100%, 20% 100%, 20% 35%, 80% 35%, 80% 65%, 20% 65%, 20% 100%, 100% 100%, 100% 0%);
+            }
+        </style>
     </head>
 
     <body>
         <h2 style="background-color: darkgreem; margin: 0;">Barcode Reader Demo</h2>
-        <video id="video" style="border: 1px solid black; width:100%; height: 50%;"></video>
+        <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <div class="overlay"></div>
+            <div class="scan-area" id="scan-area"></div>
+        </div>
         <div style="background-color: whitesmoke;">
             <pre id="qr-reader-results" style="font-size: 1rem;">
                 Scanned: 
@@ -22,8 +60,11 @@
         </script>
 
         <script src="https://unpkg.com/@zxing/library@latest"></script>
+
         <script>
-            const videoElement = document.getElementById('video');
+            const video = document.getElementById("video");
+            const scanArea = document.getElementById("scan-area");
+            const resultEl = document.getElementById("result");
             const resultElement = document.getElementById('qr-reader-results');
 
             const hints = new Map();
@@ -31,22 +72,76 @@
          
             // バーコードリーダーを初期化
             const codeReader = new ZXing.BrowserMultiFormatReader(hints);
- 
-            console.log('ZXing code readerを起動中...');
 
-            // カメラへのアクセス許可を求め、ストリームを開始
-            codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
-                if (result) {
-                    // スキャン成功
-                    console.log('スキャン成功:', result);
-                    // バーコード形式の確認
-                    resultElement.textContent = result.getText();
+            const constraionts = {
+                video : {
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                    facingMode: 'environment'
                 }
-                if (err && !(err instanceof ZXing.NotFoundException)) {
-                    // スキャンエラー
-                    console.error('スキャンエラー:', err);
-                }
+            }
+ 
+            // console.log('ZXing code readerを起動中...');
+
+            // // カメラへのアクセス許可を求め、ストリームを開始
+            // codeReader.decodeFromConstraints(constraionts, 'video', (result, err) => {
+            //     if (result) {
+            //         // スキャン成功
+            //         console.log('スキャン成功:', result);
+            //         // バーコード形式の確認
+            //         resultElement.textContent = result.getText();
+            //     }
+            //     if (err && !(err instanceof ZXing.NotFoundException)) {
+            //         // スキャンエラー
+            //         console.error('スキャンエラー:', err);
+            //     }
+            // });
+            
+    
+            // カメラ開始
+            navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+              video.srcObject = stream;
+              video.play();
+              requestAnimationFrame(tick);
             });
+            
+            // 毎フレーム解析
+            function tick() {
+              if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                // videoサイズを基準にキャンバス設定
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                // 枠の位置を video の実ピクセルサイズに変換
+                const rect = scanArea.getBoundingClientRect();
+                const videoRect = video.getBoundingClientRect();
+                const scaleX = video.videoWidth / videoRect.width;
+                const scaleY = video.videoHeight / videoRect.height;
+                const x = (rect.left - videoRect.left) * scaleX;
+                const y = (rect.top - videoRect.top) * scaleY;
+                const w = rect.width * scaleX;
+                const h = rect.height * scaleY;
+                // 枠内だけ切り出し
+                const imageData = ctx.getImageData(x, y, w, h);
+                // ZXing に渡す
+                try {
+                  const luminanceSource = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
+                  const binarizer = new ZXing.HybridBinarizer(luminanceSource);
+                  const binaryBitmap = new ZXing.BinaryBitmap(binarizer);
+                  const result = codeReader.decode(binaryBitmap);
+                  if (result) {
+                    resultEl.textContent = result.getText();
+                  }
+                } catch (err) {
+                  if (!(err instanceof NotFoundException)) {
+                    console.error(err);
+                  }
+                }
+              }
+              requestAnimationFrame(tick);
+            }
         </script>
     </body>
 </html>
