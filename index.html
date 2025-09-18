@@ -41,7 +41,7 @@
                     if (result.getBarcodeFormat() === BarcodeFormat.CODABAR) {
                         resultElement.textContent = 'CODABAR';
                     } else {
-                        resultElement.textContent = 'ELSE';
+                        resultElement.textContent = result.getText();
                     }
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
