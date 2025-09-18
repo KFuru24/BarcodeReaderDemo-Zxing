@@ -25,7 +25,7 @@
         <script>
             const videoElement = document.getElementById('video');
             const resultElement = document.getElementById('qr-reader-results');
- 
+         
             // バーコードリーダーを初期化
             const codeReader = new ZXing.BrowserMultiFormatReader();
  
@@ -37,12 +37,7 @@
                     // スキャン成功
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
-                    resultElement.textContent = result.getText();
-                    if (result.getBarcodeFormat() === BarcodeFormat.CODABAR){
-                        resultElement.textContent += "CODABAR";
-                    } else {
-                        resultElement.textContent += "ELSE";
-                    }
+                    resultElement.textContent = result.getBarcodeFormat();
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
