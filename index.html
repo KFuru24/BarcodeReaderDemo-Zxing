@@ -38,10 +38,10 @@
                     // スキャン成功
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
-                    if (result.getbarcordformat() === barcodeformat.CODABAR) {
-                        resultElement = 'CODABAR'
+                    if (result.getBarcordFormat() === BarcodeFormat.CODABAR) {
+                        resultElement = 'CODABAR';
                     } else {
-                        resultElement = 'ELSE'
+                        resultElement = 'ELSE';
                     }
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
