@@ -37,8 +37,7 @@
                     // スキャン成功
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
-                    resultElement.textContent = result.getBarcodeFormat().ToString;
-                    resultElement.textContent += result.getText();
+                    resultElement.textContent = result.getText();
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     // スキャンエラー
