@@ -64,7 +64,6 @@
         <script>
             const video = document.getElementById("video");
             const scanArea = document.getElementById("scan-area");
-            const resultEl = document.getElementById("result");
             const resultElement = document.getElementById('qr-reader-results');
 
             const hints = new Map();
@@ -73,7 +72,7 @@
             // バーコードリーダーを初期化
             const codeReader = new ZXing.BrowserMultiFormatReader(hints);
 
-            const constraionts = {
+            const constraints = {
                 video : {
                     width: { ideal: 1920 },
                     height: { ideal: 1080 },
@@ -132,7 +131,7 @@
                   const binaryBitmap = new ZXing.BinaryBitmap(binarizer);
                   const result = codeReader.decode(binaryBitmap);
                   if (result) {
-                    resultEl.textContent = result.getText();
+                    resultElement.textContent = result.getText();
                   }
                 } catch (err) {
                   if (!(err instanceof NotFoundException)) {
