@@ -39,9 +39,9 @@
                     console.log('スキャン成功:', result);
                     // バーコード形式の確認
                     if (result.getBarcodeFormat() === BarcodeFormat.CODABAR) {
-                        resultElement.innerText = 'CODABAR';
+                        resultElement.textContent = 'CODABAR';
                     } else {
-                        resultElement.innerText = 'ELSE';
+                        resultElement.textContent = 'ELSE';
                     }
                 }
                 if (err && !(err instanceof ZXing.NotFoundException)) {
