@@ -9,6 +9,7 @@
             position: relative;
             width: 100%;
             max-width: 400px;
+            max-height: 400px;
             margin: auto;
             }
             video {
@@ -74,28 +75,11 @@
 
             const constraints = {
                 video : {
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 },
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
                     facingMode: 'environment'
                 }
             }
- 
-            // console.log('ZXing code readerを起動中...');
-
-            // // カメラへのアクセス許可を求め、ストリームを開始
-            // codeReader.decodeFromConstraints(constraionts, 'video', (result, err) => {
-            //     if (result) {
-            //         // スキャン成功
-            //         console.log('スキャン成功:', result);
-            //         // バーコード形式の確認
-            //         resultElement.textContent = result.getText();
-            //     }
-            //     if (err && !(err instanceof ZXing.NotFoundException)) {
-            //         // スキャンエラー
-            //         console.error('スキャンエラー:', err);
-            //     }
-            // });
-            
     
             // カメラ開始
             navigator.mediaDevices.getUserMedia(constraints).then(stream => {
