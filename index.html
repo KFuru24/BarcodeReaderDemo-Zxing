@@ -90,7 +90,7 @@
     const hints = new Map();
     hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.CODABAR]);
 
-    const codeReader = new ZXing.BrowserMultiFormatReader(hints);
+    const codeReader = new ZXing.BrowserMultiFormatReader();
 
     const constraints = {
       video: {
@@ -125,19 +125,17 @@
         const h = rect.height * scaleY;
 
         try {
-          const luminanceSource = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
-          const binarizer = new ZXing.HybridBinarizer(luminanceSource);
-          const binaryBitmap = new ZXing.BinaryBitmap(binarizer);
-          const result = codeReader.decode(binaryBitmap);
-          if (result) {
-            resultElement.textContent = "Scanned: " + result.getText();
-          }
+              const luminanceSource = new ZXing.HTMLCanvasElementLuminanceSource(croppedCanvas);
+              const binaryBitmap = new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(luminanceSource));
+              const result = codeReader.decode(binaryBitmap, hints);
+              if (result) {
+                resultElement.textContent = "Scanned: " + result.getText();
+              }
         } catch (err) {
-          if (!(err instanceof NotFoundException)) {
+          if (!(err instanceof ZXing.NotFoundException)) {
             console.error(err);
           }
-        }
-      }
+    }
       requestAnimationFrame(tick);
     }
   </script>
